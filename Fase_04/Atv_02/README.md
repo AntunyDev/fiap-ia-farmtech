@@ -13,255 +13,153 @@
 
 <br>
 
-*Projeto acadêmico desenvolvido para a disciplina de Machine Learning da **FIAP**, aplicando a metodologia **CRISP-DM** na construção de modelos capazes de classificar variedades de grãos de trigo a partir de características físicas.*
-
----
-
-</div>
-
-## 📋 Índice
-
-- [Contexto](#-contexto)
-- [Equipe](#-equipe)
-- [Objetivo](#-objetivo)
-- [Dataset](#-dataset)
-- [Metodologia CRISP-DM](#-metodologia-crisp-dm)
-- [Modelos Utilizados](#-modelos-utilizados)
-- [Métricas de Avaliação](#-métricas-de-avaliação)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Como Executar](#-como-executar)
-- [Principais Análises Realizadas](#-principais-análises-realizadas)
-- [Resultado Esperado](#-resultado-esperado)
-- [Conclusão](#-conclusão)
-- [Referência](#-referência)
-
----
-
-## 🌱 Contexto
-
-Em cooperativas agrícolas de pequeno porte, a classificação dos grãos muitas vezes é feita **manualmente por especialistas**. Embora esse processo seja importante, ele pode ser demorado, subjetivo e sujeito a inconsistências.
-
-A proposta deste trabalho é demonstrar como **algoritmos de aprendizado de máquina** podem apoiar essa tarefa, automatizando a classificação e oferecendo resultados mais **rápidos e padronizados**.
-
----
-
-## 👥 Equipe
-
-<div align="center">
-
-| RM | Integrante |
-|:---:|:---|
-| `RM573852` | Antuny |
-| `RM570935` | Tiago |
-| `RM571449` | Carlos |
-| `RM572508` | Lucas |
-| `RM571668` | Anderson |
+Projeto acadêmico para a disciplina de Machine Learning — FIAP. Aplicação prática da metodologia CRISP-DM para construir, avaliar e otimizar modelos de classificação de variedades de trigo a partir de medidas físicas dos grãos.
 
 </div>
 
 ---
 
-## 🎯 Objetivo
+## Índice
 
-Desenvolver, avaliar e comparar modelos de classificação para identificar **três variedades de trigo**:
-
-<div align="center">
-
-| Variedade | Descrição |
-|:---:|:---|
-| 🌾 **Kama** | Variedade de trigo com características físicas específicas |
-| 🌹 **Rosa** | Variedade com perfil morfológico distinto |
-| 🍁 **Canadian** | Variedade canadense com atributos diferenciados |
-
-</div>
-
-Para isso, o projeto realiza:
-
-- ✅ Análise e pré-processamento dos dados
-- ✅ Exploração estatística e visual das características
-- ✅ Separação dos dados em treino e teste
-- ✅ Treinamento de diferentes algoritmos de classificação
-- ✅ Avaliação por métricas de desempenho
-- ✅ Otimização de hiperparâmetros com Grid Search
-- ✅ Interpretação dos resultados no contexto agrícola
+- [Visão Geral](#visão-geral)
+- [Pré-requisitos Rápidos](#pré-requisitos-rápidos)
+- [Instalação e Execução](#instalação-e-execução)
+- [Arquivos Principais](#arquivos-principais)
+- [Resumo da Metodologia](#resumo-da-metodologia)
+- [Modelos e Métricas](#modelos-e-métricas)
+- [Boas Práticas e Recomendações](#boas-práticas-e-recomendações)
+- [Referências](#referências)
+- [Autores](#autores)
 
 ---
 
-## 📊 Dataset
+## Visão Geral
 
-O conjunto de dados utilizado é o **Seeds Dataset**, disponível no [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/236/seeds).
+Este repositório contém um notebook (`seeds_classification.ipynb`) que: coleta e pré-processa o *Seeds Dataset* (UCI), explora estatisticamente as variáveis, treina vários classificadores (KNN, SVM, Random Forest, Naive Bayes, Logistic Regression), otimiza hiperparâmetros via `GridSearchCV` e interpreta os resultados com foco no F1-score macro.
 
-> **210 amostras** de grãos de trigo, distribuídas igualmente entre três variedades. Cada amostra possui **7 atributos físicos** e uma **classe alvo**.
-
-### Atributos
-
-| # | Atributo | Descrição |
-|:---:|:---|:---|
-| 1 | **Área** | Medida da área do grão |
-| 2 | **Perímetro** | Comprimento do contorno do grão |
-| 3 | **Compacidade** | Medida relacionada ao formato do grão |
-| 4 | **Comprimento do núcleo** | Comprimento do eixo principal do núcleo |
-| 5 | **Largura do núcleo** | Comprimento do eixo secundário do núcleo |
-| 6 | **Coef. de assimetria** | Medida da assimetria do grão |
-| 7 | **Comprimento do sulco** | Comprimento do sulco central do grão |
-| — | **Classe** | Variedade do trigo (Kama, Rosa, Canadian) |
+O objetivo prático é demonstrar uma pipeline reprodutível que poderia, com mais dados, ser integrada a uma ferramenta de apoio à classificação em cooperativas agrícolas.
 
 ---
 
-## 🔄 Metodologia CRISP-DM
+## Pré-requisitos Rápidos
 
-O notebook segue a metodologia **CRISP-DM** (*Cross-Industry Standard Process for Data Mining*), uma abordagem consolidada em projetos de ciência de dados.
+- Python 3.10+
+- Recomendado: criar um ambiente virtual (`venv` ou `conda`)
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│   1. Entendimento     2. Entendimento     3. Preparação         │
-│      do Negócio  ──▶     dos Dados   ──▶    dos Dados           │
-│                                                                 │
-│         ▲                                       │               │
-│         │                                       ▼               │
-│                                                                 │
-│   6. Otimização e     5. Avaliação        4. Modelagem          │
-│      Interpretação ◀──   dos Modelos  ◀──                       │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-<details>
-<summary><strong>📌 Detalhamento das Etapas</strong></summary>
-
-<br>
-
-| Etapa | Descrição |
-|:---|:---|
-| **1. Entendimento do negócio** | Definição do problema: automatizar a classificação de grãos para apoiar cooperativas agrícolas. |
-| **2. Entendimento dos dados** | Carregamento do dataset, visualização inicial, identificação das classes e análise da estrutura das variáveis. |
-| **3. Preparação dos dados** | Verificação de valores ausentes, separação entre variáveis explicativas e variável alvo, divisão treino/teste e padronização. |
-| **4. Modelagem** | Treinamento de diferentes algoritmos de classificação. |
-| **5. Avaliação** | Comparação dos modelos por acurácia, precisão, recall, F1-score e matrizes de confusão. |
-| **6. Otimização e interpretação** | Ajuste de hiperparâmetros com Grid Search e análise dos resultados obtidos. |
-
-</details>
-
----
-
-## 🤖 Modelos Utilizados
-
-Foram implementados e comparados **cinco algoritmos** de classificação:
-
-| Algoritmo | Sigla | Requer Padronização? |
-|:---|:---:|:---:|
-| K-Nearest Neighbors | KNN | ✅ Sim |
-| Support Vector Machine | SVM | ✅ Sim |
-| Random Forest | RF | ❌ Não |
-| Naive Bayes Gaussiano | GNB | ❌ Não |
-| Regressão Logística | LR | ✅ Sim |
-
-> **Nota:** Os modelos sensíveis à escala (KNN, SVM e Regressão Logística) foram treinados com padronização das variáveis por meio do `StandardScaler`.
-
----
-
-## 📈 Métricas de Avaliação
-
-| Métrica | Descrição |
-|:---|:---|
-| **Acurácia** | Proporção total de classificações corretas |
-| **Precisão (macro)** | Média da precisão entre as classes |
-| **Recall (macro)** | Média do recall entre as classes |
-| **F1-score (macro)** | Média do equilíbrio entre precisão e recall |
-| **Matriz de confusão** | Visualização dos acertos e erros por classe |
-
-> 💡 O uso do **F1-score macro** é importante porque avalia o desempenho médio entre todas as variedades, evitando que a análise dependa apenas da acurácia geral.
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-📦 ATV_02/
- ┣ 📄 README.md                          # Documentação do projeto
- ┗ 📂 seeds/
-   ┣ 📓 seeds_classification.ipynb       # Notebook principal (análise + modelagem)
-   ┗ 📄 seeds_dataset.txt                # Dataset utilizado
-```
-
----
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-
-- Python 3.10 ou superior
-- Jupyter Notebook
-
-### Passo a passo
-
-**1.** Clone o repositório ou baixe os arquivos do projeto.
-
-**2.** Instale as dependências necessárias:
+Instale dependências principais:
 
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn jupyter
+pip install -r requirements.txt
 ```
 
-**3.** Inicie o Jupyter Notebook:
+Se não houver `requirements.txt`, instale diretamente:
 
 ```bash
-jupyter notebook seeds/seeds_classification.ipynb
+pip install pandas numpy matplotlib seaborn scikit-learn jupyter joblib
 ```
 
-**4.** Execute as células **em ordem**, do início ao fim.
+---
 
-> 📌 O notebook foi preparado para encontrar o arquivo `seeds_dataset.txt` tanto quando executado dentro da pasta `seeds` quanto a partir da raiz do projeto.
+## Instalação e Execução
+
+1. Abra um terminal na pasta do projeto.
+
+2. (Opcional) Crie e ative um ambiente virtual:
+
+```bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS / Linux
+source .venv/bin/activate
+```
+
+3. Instale dependências (veja seção anterior).
+
+4. Execute o notebook:
+
+```bash
+jupyter notebook Notebook/seeds_classification.ipynb
+```
+
+5. Execute as células na ordem indicada. O notebook foi preparado para localizar `seeds_dataset.txt` quando executado a partir da raiz do projeto ou da pasta `Notebook`.
+
+Dica rápida para aceleração de pesquisa de hiperparâmetros: o notebook já usa `n_jobs=-1` no `GridSearchCV`, de modo a aproveitar todos os núcleos disponíveis no treinamento.
+
+```python
+GridSearchCV(..., n_jobs=-1)
+```
 
 ---
 
-## 🔍 Principais Análises Realizadas
+## Arquivos Principais
+
+- `Notebook/seeds_classification.ipynb` — Notebook principal com análise completa e modelagem.
+- `Notebook/seeds_dataset.txt` — Dados originais (formato UCI: colunas separadas por espaços).
+- `README.md` — Documentação (este arquivo).
+
+---
+
+## Resumo da Metodologia
+
+Seguiu-se o fluxo CRISP-DM: entendimento do negócio, entendimento dos dados, preparação, modelagem, avaliação e otimização/interpretação. Os passos fundamentais implementados no notebook:
+
+- Carregamento e atribuição de nomes às colunas
+- Checagem de valores ausentes e balanceamento das classes
+- Estatísticas descritivas (média, mediana, desvio padrão)
+- Visualizações: histogramas, boxplots, scatterplots, pairplot e matriz de correlação
+- Separação estratificada treino/teste (70/30)
+- Pipelines com `StandardScaler` para modelos sensíveis à escala
+- Treinamento inicial de 5 algoritmos e avaliação com acurácia, precisão, recall e F1-score (macro)
+- Otimização de hiperparâmetros com `GridSearchCV` (StratifiedKFold)
+
+---
+
+## Modelos e Métricas
+
+Modelos incluídos: KNN, SVM, Random Forest, Naive Bayes (Gaussiano) e Regressão Logística. A métrica prioritária usada para seleção foi o **F1-score macro**, adequada para conjuntos balanceados e que mede o desempenho médio entre classes.
+
+O notebook gera tabelas comparativas, gráficos de barras do F1-score, relatórios de classificação e matrizes de confusão para cada modelo (antes e depois da otimização).
+
+---
+
+## Boas Práticas e Recomendações
+
+- Reprodutibilidade: salvar o modelo final com `joblib.dump(melhor_modelo, 'Notebook/melhor_modelo.joblib')`.
+- Performance: use `n_jobs=-1` em `GridSearchCV` e `RandomizedSearchCV` para acelerar buscas em máquinas com múltiplos núcleos.
+- Avaliação adicional: considerar validação cruzada externa (`cross_val_score`) e testes com novos dados de safra/região.
+- Explicabilidade: analisar importância de características (para Random Forest) e considerar técnicas como SHAP para explicabilidade local.
+
+Exemplo para salvar o modelo final:
+
+```python
+from joblib import dump
+dump(melhor_modelo, 'Notebook/melhor_modelo.joblib')
+```
+
+Exemplo para carregar o modelo salvo:
+
+```python
+from joblib import load
+melhor_modelo = load('Notebook/melhor_modelo.joblib')
+```
+
+---
+
+## Referências
+
+- UCI Machine Learning Repository — Seeds Dataset: https://archive.ics.uci.edu/dataset/236/seeds
+
+---
+
+## Autores
+
+Equipe FIAP — Projeto acadêmico.
+
+---
 
 <div align="center">
 
-| Categoria | Análises |
-|:---|:---|
-| **Exploração Inicial** | Primeiras linhas do dataset, estatísticas descritivas (média, mediana, desvio padrão) |
-| **Distribuição** | Análise da distribuição das classes, histogramas das características |
-| **Visualizações** | Boxplots por variedade, gráficos de dispersão, matriz de correlação |
-| **Pré-processamento** | Verificação de valores ausentes, avaliação de escalonamento |
-| **Modelagem** | Treinamento e comparação dos modelos, otimização com Grid Search |
-| **Resultados** | Interpretação final e insights para o contexto agrícola |
-
-</div>
-
----
-
-## 📊 Resultado Esperado
-
-Ao final da execução, o notebook apresenta:
-
-- 📋 Tabela comparativa dos modelos base
-- 📄 Relatórios de classificação por algoritmo
-- 🔲 Matrizes de confusão
-- ⚡ Comparação após otimização com Grid Search
-- 🏆 Indicação do **melhor modelo** segundo o F1-score macro
-- 💬 Discussão dos insights obtidos
-
----
-
-## 💡 Conclusão
-
-O projeto demonstra que técnicas de **Machine Learning** podem ser aplicadas para apoiar a classificação de grãos de trigo com base em características físicas. Mesmo utilizando um dataset pequeno, os modelos conseguem identificar **padrões relevantes** entre as variedades.
-
-> Para uso real em cooperativas agrícolas, seria recomendado **ampliar a base de dados** com novas amostras, coletadas em diferentes regiões, safras e condições de produção. Ainda assim, o estudo mostra o potencial da **automação como ferramenta de apoio à tomada de decisão** no setor agrícola.
-
----
-
-## 📚 Referência
-
-- UCI Machine Learning Repository. **Seeds Dataset**. Disponível em: <https://archive.ics.uci.edu/dataset/236/seeds>
-
----
-
-<div align="center">
-
-*Desenvolvido com 🌾 para a disciplina de Machine Learning — FIAP 2025*
+*Desenvolvido com 🌾 para a disciplina de Machine Learning — FIAP*
 
 </div>

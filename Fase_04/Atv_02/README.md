@@ -160,6 +160,6 @@ Equipe FIAP — Projeto acadêmico.
 
 <div align="center">
 
-*Desenvolvido com 🌾 para a disciplina de Machine Learning — FIAP*
+*Desenvolvido com Machine Learning — FIAP*
 
 </div>

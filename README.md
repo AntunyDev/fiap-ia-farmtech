@@ -13,6 +13,7 @@
 ![Oracle](https://img.shields.io/badge/Oracle_DB-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
 ![R](https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-2ea44f?style=for-the-badge)
 
 <br>
@@ -50,14 +51,14 @@ Cada fase do curso adiciona novas competências e tecnologias, refletindo a prog
 ## 🗺️ Mapa de Fases
 
 ```
-  Fase 01                Fase 02                Fase 03                Fase 04
-┌──────────┐         ┌──────────┐          ┌──────────┐          ┌──────────┐
-│  Python   │         │  Python  │          │  Oracle  │          │  Machine │
-│  R Lang   │  ───▶   │  Oracle  │   ───▶   │   SQL    │   ───▶   │ Learning │
-│  CSV/API  │         │  Rich UI │          │  IoT     │          │ CRISP-DM │
-└──────────┘         └──────────┘          └──────────┘          └──────────┘
-  Fundamentos          Gestão                Banco de               Modelagem
-  de Dados             Agrícola              Dados                  Preditiva
+  Fase 01                Fase 02                Fase 03                Fase 04                Fase 05
+┌──────────┐         ┌──────────┐          ┌──────────┐          ┌──────────┐          ┌──────────┐
+│  Python   │         │  Python  │          │  Oracle  │          │  Machine │          │  Machine │
+│  R Lang   │  ───▶   │  Oracle  │   ───▶   │   SQL    │   ───▶   │ Learning │   ───▶   │ Learning │
+│  CSV/API  │         │  Rich UI │          │  IoT     │          │ CRISP-DM │          │  + Cloud │
+└──────────┘         └──────────┘          └──────────┘          └──────────┘          └──────────┘
+  Fundamentos          Gestão                Banco de               Modelagem              Nuvem &
+  de Dados             Agrícola              Dados                  Preditiva              Deploy
 ```
 
 ---
@@ -91,9 +92,15 @@ FarmTech/
 │       ├── 📁 meugit/          # Consultas SQL e dados
 │       └── 📄 README.md
 │
-└── 📁 Fase_04/
-    └── 📁 Atv_02/             # Machine Learning — Classificação de Grãos
-        ├── 📁 seeds/           # Notebook e dataset
+├── 📁 Fase_04/
+│   └── 📁 Atv_02/             # Machine Learning — Classificação de Grãos
+│       ├── 📁 seeds/           # Notebook e dataset
+│       └── 📄 README.md
+│
+└── 📁 Fase_05/
+    └── 📁 Atv_01/             # ML na Cabeça — Rendimento de Safra + Cloud (AWS)
+        ├── 📁 data/             # Dataset oficial (crop_yield.csv)
+        ├── 📁 imagens/          # Gráficos da estimativa de custos AWS
         └── 📄 README.md
 ```
 
@@ -191,6 +198,34 @@ Aplicação de algoritmos de aprendizado de máquina seguindo a metodologia **CR
 
 ---
 
+<details>
+<summary><b>📓 Fase 05 — Nuvem: Machine Learning na Cabeça + Computação em Nuvem</b></summary>
+
+<br>
+
+> **Diretório:** [`Fase_05/Atv_01`](./Fase_05/Atv_01)
+
+Previsão de rendimento de safra e descoberta de tendências de produtividade a partir
+de dados agrometeorológicos de 4 culturas, com cinco algoritmos de regressão
+comparados, clusterização e detecção de outliers — além de uma estimativa comparativa
+de custos de hospedagem entre as regiões AWS de São Paulo e N. Virginia.
+
+**🔧 Tecnologias:** Python · Jupyter Notebook · scikit-learn · Pandas · NumPy ·
+Matplotlib · Seaborn · AWS (EC2, EBS, Pricing Calculator)
+
+**✨ Destaques:**
+- 5 algoritmos de regressão comparados: Linear, Árvore de Decisão, Random Forest,
+  Gradient Boosting e SVR, com validação cruzada
+- Clusterização (K-Means + PCA) e detecção de outliers (IQR + Isolation Forest + DBSCAN)
+- Achado de dados: correção de unidade do rendimento (hg/ha → t/ha) e identificação de
+  pseudo-replicação climática na base oficial
+- Estimativa de custos AWS (EC2 + EBS) comparando São Paulo x N. Virginia, com
+  justificativa técnica considerando LGPD e latência
+
+</details>
+
+---
+
 ## 🛠️ Stack Tecnológica
 
 <div align="center">
@@ -202,6 +237,7 @@ Aplicação de algoritmos de aprendizado de máquina seguindo a metodologia **CR
 | **Machine Learning** | scikit-learn · Pandas · NumPy |
 | **Visualização** | Matplotlib · Seaborn · Rich |
 | **Dados & APIs** | CSV · JSON · API Meteorológica |
+| **Cloud Computing** | AWS EC2 · AWS EBS · AWS Pricing Calculator |
 | **Ferramentas** | Jupyter Notebook · Git/GitHub |
 
 </div>
@@ -215,10 +251,11 @@ Aplicação de algoritmos de aprendizado de máquina seguindo a metodologia **CR
                  │              JORNADA FARMTECH SOLUTIONS                  │
                  └──────────────────────────────────────────────────────────┘
 
-  ▓▓▓▓░░░░░░░░░░░░   Fase 01 → Fundamentos (Python, R, APIs)
-  ▓▓▓▓▓▓▓▓░░░░░░░░   Fase 02 → Gestão (CRUD, Oracle, Rich UI)
-  ▓▓▓▓▓▓▓▓▓▓▓▓░░░░   Fase 03 → Dados (SQL, IoT, Sensores)
-  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   Fase 04 → Modelagem (ML, CRISP-DM, scikit-learn)
+  ▓▓▓▓░░░░░░░░░░░░░░░░   Fase 01 → Fundamentos (Python, R, APIs)
+  ▓▓▓▓▓▓▓▓░░░░░░░░░░░░   Fase 02 → Gestão (CRUD, Oracle, Rich UI)
+  ▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░   Fase 03 → Dados (SQL, IoT, Sensores)
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░   Fase 04 → Modelagem (ML, CRISP-DM, scikit-learn)
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   Fase 05 → Nuvem (ML + AWS Cloud Computing)
 ```
 
 ---

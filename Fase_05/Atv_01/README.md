@@ -145,7 +145,7 @@ pergunta 2 muda o cálculo: com exigência de acesso rápido aos dados dos senso
 restrição legal de armazenamento no exterior, a escolha correta é `t4g.micro`
 **em São Paulo (sa-east-1)** (~US$ 15,02/mês).
 
-- 🎥 **Vídeo demonstrativo (não listado, até 5 min):** `[LINK DO YOUTUBE]`
+- 🎥 **Vídeo demonstrativo (não listado):** [youtu.be/xuF_gcdwmhM](https://youtu.be/xuF_gcdwmhM)
 
 ---
 

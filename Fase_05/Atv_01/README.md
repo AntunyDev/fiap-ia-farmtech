@@ -68,83 +68,82 @@ modelo de Machine Learning, em uma máquina Linux simples com:
 | Armazenamento | 50 GB (HD/SSD) |
 | Tipo de cotação | On-Demand — 100% |
 
-### 1. Comparação de custos: São Paulo (sa-east-1) x N. Virginia (us-east-1)
+Utilizamos a [calculadora pública de estimativa de custos da AWS](https://calculator.aws)
+(*Create estimate*) para simular os dois cenários possíveis — São Paulo e N. Virginia —
+com essa configuração.
 
-Duas famílias de instância EC2 atendem exatamente essas 4 especificações — **2 vCPUs,
-1 GiB de RAM e rede "Até 5 Gigabit"** — no catálogo da AWS: `t3.micro` (x86) e
-`t4g.micro` (ARM/Graviton, mais barata para a mesma configuração). O `t2.micro`
-(frequentemente lembrado por ser o de "camada gratuita") **não atende ao requisito de
-rede** (é classificado como "Baixo a Moderado", não "Até 5 Gigabit"), por isso não foi
-considerado.
+### 1. Escolha da instância e da região
 
-Valores **On-Demand, Linux**, cotados na calculadora de preços da AWS (Price List API)
-em 07/09/2026:
+Buscando a solução mais econômica que atendesse aos 4 requisitos, a própria calculadora
+aponta a `t4g.micro` (processador AWS Graviton2, arquitetura ARM) como a instância de
+menor custo disponível para "2 vCPU, 1 GiB de Memória, Até 5 Gigabit de rede":
 
-| Instância | vCPU | RAM | Rede | São Paulo (sa-east-1) | N. Virginia (us-east-1) |
-|---|---|---|---|---|---|
-| `t3.micro` | 2 | 1 GiB | Até 5 Gbps | US$ 0,0168/h (≈ US$ 12,26/mês) | US$ 0,0104/h (≈ US$ 7,59/mês) |
-| `t4g.micro` | 2 | 1 GiB | Até 5 Gbps | US$ 0,0134/h (≈ US$ 9,78/mês) | US$ 0,0084/h (≈ US$ 6,13/mês) |
+![Seleção da instância t4g.micro na calculadora AWS, filtrada por 2 vCPU, 1 GiB e rede até 5 Gigabit](./imagens/aws_instancia_calculadora.png)
 
-Armazenamento **EBS gp3, 50 GB**:
+Para o armazenamento, optamos pelo **Amazon EBS gp3** (50 GB), que oferece a melhor
+relação custo-benefício, com 3.000 IOPS e 125 MB/s de taxa de transferência inclusos na
+faixa de preço base.
 
-| Região | US$/GB-mês | 50 GB/mês |
+Apesar de existir a opção de preço mais baixo nos EUA, a região foi decidida por
+critérios que vão além do custo (ver seção 2) — optamos pela **América do Sul (São
+Paulo)**:
+
+![Seleção da região América do Sul (São Paulo) na calculadora AWS](./imagens/aws_regiao_calculadora.png)
+
+**📊 Comparativo mensal (estimativa na AWS Pricing Calculator, On-Demand, Linux):**
+
+| Recurso AWS | 🇺🇸 us-east-1 (N. Virginia) | 🇧🇷 sa-east-1 (São Paulo) |
 |---|---|---|
-| São Paulo (sa-east-1) | US$ 0,152 | US$ 7,60 |
-| N. Virginia (us-east-1) | US$ 0,08 | US$ 4,00 |
+| Compute (EC2 `t4g.micro`) | ~US$ 6,13/mês | ~US$ 9,49/mês |
+| Storage (50 GB EBS `gp3`) | ~US$ 4,00/mês | ~US$ 5,53/mês |
+| **Custo total estimado** | **~US$ 10,13/mês** | **~US$ 15,02/mês** |
 
-**Custo total mensal estimado** (instância 24×7 + 50 GB de armazenamento):
+![Comparativo de custo mensal AWS entre N. Virginia e São Paulo](./imagens/aws_custo_comparativo.png)
 
-![Comparativo de custo mensal AWS entre São Paulo e N. Virginia](./imagens/aws_custo_comparativo.png)
-
-| Configuração | São Paulo | N. Virginia | Diferença |
-|---|---|---|---|
-| `t3.micro` + 50 GB gp3 | US$ 19,86/mês | US$ 11,59/mês | São Paulo é **+71%** mais cara |
-| `t4g.micro` + 50 GB gp3 | US$ 17,38/mês | US$ 10,13/mês | São Paulo é **+72%** mais cara |
-
-**Solução mais barata:** `t4g.micro` em **N. Virginia (us-east-1)**, a ~US$ 10,13/mês —
-a opção Graviton (ARM) é a mais econômica em ambas as regiões, e N. Virginia é
-sistematicamente mais barata que São Paulo para a mesma configuração (a AWS tem mais
-capacidade instalada e concorrência de datacenters na região histórica dos EUA, o que
-pressiona os preços para baixo).
+*(Custos de transferência de dados de saída não estão inclusos, pois dependem do volume
+de tráfego da API e, a princípio, não ultrapassam o limite do Free Tier.)*
 
 > 🔁 **Reproduza você mesmo na calculadora oficial** (para o print/vídeo da entrega):
 > 1. Acesse a [AWS Pricing Calculator](https://calculator.aws) → *Create estimate* → *Amazon EC2*.
 > 2. Sistema operacional: **Linux**. Cotação: **On-Demand**.
-> 3. Em "Number of instances": `1`. Em "vCPUs": filtre por `2`, em "Memory": `1 GiB` — selecione `t3.micro` (e repita para `t4g.micro`).
+> 3. Em "Memória (GiB)": `1 GiB`, em "Desempenho de rede": `Up to 5 Gigabit` — selecione `t4g.micro`.
 > 4. Storage: adicione um volume **EBS gp3 de 50 GB**.
-> 5. Troque a região no topo da página entre **South America (São Paulo)** e **US East (N. Virginia)** e compare o total mensal exibido.
+> 5. Troque a região no topo da página entre **América do Sul (São Paulo)** e **Leste dos EUA (N. da Virgínia)** e compare o total mensal exibido.
+
+**💡 Free Tier:** a `t4g.micro` também está incluída no nível gratuito da AWS — até 750
+horas mensais sem custo, um incentivo a mais para validar o modelo em produção antes de
+escalar:
+
+![Tabela do AWS Free Tier mostrando o Amazon EC2 com t4g.micro incluído](./imagens/aws_free_tier.png)
 
 ### 2. Qual região escolher, considerando acesso rápido aos dados e restrições legais?
 
-Apesar de N. Virginia ser ~70% mais barata, a **recomendação para este cenário é
-hospedar em São Paulo (sa-east-1)**. Justificativa:
+Apesar de a região de N. Virginia apresentar um custo ~30-35% menor, a **recomendação
+para este cenário é hospedar em São Paulo (sa-east-1)**. Justificativa:
 
-- **Restrições legais (LGPD):** a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)
-  impõe regras específicas para **transferência internacional de dados** (Art. 33) quando
-  os dados envolvem informações de uma pessoa natural identificável. Os dados de sensores
-  em si (clima/solo) tendem a ser dados não-pessoais, mas, na prática, um sistema de
-  monitoramento de fazenda normalmente também guarda dados do produtor rural, contratos e
-  geolocalização de propriedade privada — o que pode caracterizar dado pessoal. **Manter
-  a infraestrutura em território nacional (sa-east-1) elimina totalmente essa discussão
-  jurídica**, evitando o custo/risco de análise de conformidade para transferência
-  internacional, cláusulas contratuais específicas, ou eventual exigência contratual do
-  cliente (comum em contratos do agronegócio brasileiro) de que os dados não saiam do país.
-- **Latência / acesso rápido aos dados:** a fazenda e seus sensores estão no Brasil. A
-  distância física até `sa-east-1` (São Paulo) é uma fração da distância até
-  `us-east-1` (Virgínia, EUA) — na prática, isso normalmente significa uma latência de
-  ida-e-volta de dezenas de milissegundos para o Brasil, contra mais de cem
-  milissegundos para os EUA. Para uma API que recebe leituras de sensores continuamente e
-  precisa responder rápido (ex.: alertas quase em tempo real), essa diferença é
-  perceptível e relevante.
-- **Custo/benefício:** o adicional de ~US$ 7-8/mês (diferença entre as regiões) é um
-  valor baixo em termos absolutos para uma carga de trabalho desse porte, e é um preço
-  razoável a pagar para eliminar risco legal e reduzir latência — a decisão não é "a
-  mais barata no papel", e sim a mais adequada ao conjunto de requisitos do problema.
+- **⚡ Baixa latência / acesso rápido aos dados:** os sensores instalados na fazenda e no
+  maquinário agrícola enviam fluxos contínuos de dados (telemetria, clima local, estado
+  do solo). Uma rota até `us-east-1` (N. Virginia) tem latência média de **110 a 150 ms**;
+  até `sa-east-1` (São Paulo), de **10 a 30 ms**. Para que o modelo preditivo da Entrega 1
+  atue quase em tempo real — alertando o produtor antes que uma condição de risco se
+  agrave —, essa diferença de ~100 ms é relevante.
+- **🛡️ Soberania de dados e conformidade legal (LGPD):** o sistema lida com geolocalização
+  exata das propriedades rurais atendidas, dados contratuais dos produtores e padrões
+  operacionais das máquinas — informações potencialmente sensíveis. A Lei Geral de
+  Proteção de Dados (Lei nº 13.709/2018) impõe regras específicas para **transferência
+  internacional de dados** (Art. 33), e contratos do agronegócio brasileiro
+  frequentemente exigem ou recomendam que dados de clientes nacionais não cruzem
+  fronteiras. Manter a infraestrutura em território nacional elimina essa discussão
+  jurídica e mitiga riscos de auditoria.
+- **Custo/benefício:** o investimento adicional de ~US$ 5/mês compensa amplamente o
+  ganho em segurança jurídica e em desempenho da aplicação — a decisão não é "a mais
+  barata no papel", e sim a mais adequada ao conjunto de requisitos do problema.
 
-**Conclusão:** a instância mais barata (`t4g.micro` em N. Virginia) responde à
-pergunta 1 (menor custo, sem outras restrições); já a pergunta 2 muda o cálculo — com
-exigência de acesso rápido e restrição legal de armazenamento no exterior, a escolha
-correta é `t4g.micro` (ou `t3.micro`) **em São Paulo (sa-east-1)**.
+**Conclusão:** a instância mais barata em termos absolutos é a `t4g.micro` em
+**N. Virginia** (~US$ 10,13/mês) — resposta à pergunta 1, sem outras restrições. Já a
+pergunta 2 muda o cálculo: com exigência de acesso rápido aos dados dos sensores e
+restrição legal de armazenamento no exterior, a escolha correta é `t4g.micro`
+**em São Paulo (sa-east-1)** (~US$ 15,02/mês).
 
 - 🎥 **Vídeo demonstrativo (não listado, até 5 min):** `[LINK DO YOUTUBE]`
 

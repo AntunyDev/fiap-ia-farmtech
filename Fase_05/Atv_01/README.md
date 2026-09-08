@@ -40,7 +40,7 @@ textual dos resultados, **dentro do notebook Jupyter** — não repetimos o cont
 para evitar duplicação.
 
 - 📓 **Notebook:** [`AntunyMarques_rm573852_pbl_fase5.ipynb`](./AntunyMarques_rm573852_pbl_fase5.ipynb)
-- 🎥 **Vídeo demonstrativo (não listado, até 5 min):** `[LINK DO YOUTUBE]`
+- 🎥 **Vídeo demonstrativo (não listado):** [youtu.be/-qpAL5P7Pv4](https://youtu.be/-qpAL5P7Pv4)
 - 📊 **Base de dados:** [`data/crop_yield.csv`](./data/crop_yield.csv) — fornecida pela FIAP (Capítulo 10)
 
 **Resumo do que o notebook cobre** (detalhes, gráficos e discussão completa no
